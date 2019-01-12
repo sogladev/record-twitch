@@ -1,5 +1,5 @@
 # record-critrole
-Info to record critical role on Windows or on a Ubuntu 18.04 (or similar)
+Info to record [Critical Role](https://critrole.com) on Windows or on a Ubuntu 18.04 (or similar)
 system.
 
 Your pc must be on while running either method.
