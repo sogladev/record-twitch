@@ -1,0 +1,6 @@
+# copy the contents e.g. xclip -sel c < crontab.txt
+# and paste into editor when running following cmd
+# crontab -e 
+MAILTO=""
+PATH=/home/user/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+50 3 * * 5 timeout 6h sh /home/user/scheduled_jobs/record.sh >> /home/user/scheduled_jobs/record.log 2>&1
