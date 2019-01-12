@@ -52,8 +52,8 @@ Modify `cronjob.txt` settings and paste to `cronjob -e`
 
 `50 3 * * 5 timeout 6h sh /home/user/scheduled_jobs/record.sh >> /home/user/scheduled_jobs/record.log 2>&1`
 
-`50 3 * * 5` see [Crontab guru][https://crontab.guru/#50_3_*_*_5]. 'At 03:50 on
-Friday' Critical Role airs at 4:00AM local time on Friday. Change the time accordingly to your timezone. I'm aware timezones can be set `America/Los_Angeles`. Sadly, this doesn't seem to work on my pc.
+`50 3 * * 5` see [Crontab guru](https://crontab.guru/#50_3_*_*_5). `At 03:50 on
+Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accordingly to your timezone. I'm aware timezones can be set `America/Los_Angeles`. Sadly, this doesn't seem to work on my pc.
 
 `timeout 6h` stops recording after 6 hours
 
