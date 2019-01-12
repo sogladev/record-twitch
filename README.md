@@ -5,12 +5,15 @@ system.
 Your pc must be on while running either method.
 
 ## Requirements
-[Streamlink](https://github.com/streamlink/streamlink)
 [Twitch oauth token](https://twitchapps.com/tmi/)
 
+
+[Streamlink](https://github.com/streamlink/streamlink)
+
 Read the docs:
-For Windows click to [`releases/`](https://github.com/streamlink/streamlink/releases)
-For Ubuntu 18.04 (or similar) run `sudo pip install streamlink`
+* For Windows click to [`releases/`](https://github.com/streamlink/streamlink/releases)
+
+* For Ubuntu 18.04 (or similar) run `sudo pip install streamlink`
 
 ## Windows
 Edit `record.bat` and change the following settings inside the script
@@ -32,19 +35,30 @@ scheduled task for this similar to the one below.
 
 
 ## Ubuntu 18.04 or similar
-`record.sh` and cronjob `cronjob.txt`
+Modify `record.sh` and cronjob `cronjob.txt`
 
+Change path to record.sh `/home/user/scheduled_jobs/record.sh`
+
+Change output dir of video `/home/user/Videos/criticalrole/`
+
+### Setup cronjob
 `cronjob.txt` contains settings needed to run `record.sh` and output video to
 the folder. 
 
 `PATH` is your $PATH variable (`echo $PATH`). This is necessary to run the
 `streamlink` application.
 
-`50 3 * * 5 timeout 6h sh /home/user/scheduled_jobs/record.sh >> /home/user/scheduled_jo    bs/record.log 2>&1`
+Modify `cronjob.txt` settings and paste to `cronjob -e`
+
+`50 3 * * 5 timeout 6h sh /home/user/scheduled_jobs/record.sh >> /home/user/scheduled_jobs/record.log 2>&1`
 
 `50 3 * * 5` see [Crontab guru][https://crontab.guru/#50_3_*_*_5]. 'At 03:50 on
-Friday' Critrole airs at 4:00AM local time. Change the time accordingly to your
-timezonel. I'm aware timezones can be set `America/Los_Angeles`. Sadly, this doesn't seem to work on my pc.
+Friday' Critical Role airs at 4:00AM local time on Friday. Change the time accordingly to your timezone. I'm aware timezones can be set `America/Los_Angeles`. Sadly, this doesn't seem to work on my pc.
 
+`timeout 6h` stops recording after 6 hours
+
+`>> /home/user/scheduled_jobs/record.log 2>&1` (optional) writes the stdout to log. This line can be omitted.
+
+### Modify `record.sh`
 `record.sh` set your AUTH_TOKEN or config in streamlink cfg. Set `OUTDIR` to
 where you want the video saved.
