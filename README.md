@@ -1,30 +1,32 @@
 # record-critrole
-Info to record [Critical Role](https://critrole.com) on Windows or on a Ubuntu 18.04 (or similar)
+Info to record Twitch.tv shows on Windows or on a Ubuntu 18.04 (or similar)
 system.
 
-Your pc must be on while running either method.
+In essence, this is a wrapper to call `streamlink`. It offers more reliable
+recording and allows you to set a duration (optional) and a time until
+recording (optional).
+
+Initially created to record [Critical Role](https://critrole.com). One feature is to parse the website http://wheniscriticalrole.com to see when the show airs.
+
 
 ## TODO
 
-Rewrite code to be used more easily on multiple platforms.
-
-GUI with PyQT5. Fastest and easiest for required functionality. TKTinker too
-much of a hassle for this use case.
+GUI with PyQT5. Fastest and easiest for required functionality. TKTinker feels
+like too much work to learn.
 
 Package with PyInstall. Has support for python3+, Windows and Linux, one file
 executable. PyInstall method failed due to not having streamlink installed.
 Tried adding dependencies to hidden_imports in .spec file, but to no avail.
 
-
 - [x] Rewriting below scripts into python only
-- [ ] GUI for easy configuration 
+- [x] Read time until critical role from website
 - [x] ~~Package with PyInstall~~ (failed)
-- [ ] Package with docker
-- [ ] Read time until critical role from website
+- [ ] GUI for easy configuration 
+- [ ] Package with docker to avoid hassle with Streamlink/Selenium install
+- [ ] Update cronjob to launch python script
 
 ## Requirements
 [Twitch oauth token](https://twitchapps.com/tmi/)
-
 
 [Streamlink](https://github.com/streamlink/streamlink)
 
@@ -33,7 +35,43 @@ Read the docs:
 
 * For Ubuntu 18.04 (or similar) run `sudo pip install streamlink`
 
+### Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10) Required:
+```
+streamlink
+python3.6 
+dependencies listed in `requirements.txt` 
+(optional) Selenium with Firefox driver
+```
+
+Setup environment
+```
+(optional) mkvirtualenv -p /usr/bin/python3.6 <env-name> 
+(required) pip3 install -r requirements.txt
+(example) python3 record.py -u twitch.tv/geekandsundry -t AUTH_TOKEN -o outdir
+-w 3600
+```
+By default `-u` is set as `twitch.tv/geekandsundry`
+
+`-t` if not set, `--twitch-oauth-token` when calling streamlink will not be set and will use token set in streamlink config
+
+`-o /home/user/Videos/criticalrole` to specify folder (folder must exist). Paths can be POXIX or Windows format. Thanks to `pathlib`.
+
+`-n` start recording right now (overrides `- w` option)
+
+`-w` amount of seconds to wait until start recording. Check
+[wheniscriticalrole.com][https://wheniscriticalrole.com]
+
+Omitting `-n` or `-w` option defaults to using Selenium to parse the above
+mentioned website and gets the most accurate time automaticly. You will need
+Selenium and a Firefox driver available in your Path.  
+
+
 ## Windows
+required:
+```
+streamlink
+```
+
 Edit `record.bat` and change the following settings inside the script
 
 1. Use `cd` to navigate to output folder where streamlink will be called
@@ -53,7 +91,9 @@ scheduled task for this similar to the one below.
 
 
 ## Ubuntu 18.04 or similar
-
+```
+streamlink
+```
 
 Modify `record.sh` and cronjob `cronjob.txt`
 
@@ -82,31 +122,6 @@ Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accor
 ### Modify `record.sh`
 `record.sh` set your AUTH_TOKEN or config in streamlink cfg. Set `OUTDIR` to
 where you want the video saved.
-
-### Record.py (Ubuntu 18.04 and Windows 10)
-Requires python3.6 and dependencies listed in `requirements.txt` to be installed
-
-```
-(optional) mkvirtualenv -p /usr/bin/python3.6 <env-name> 
-(required) pip3 install -r requirements.txt
-(example) python3 record.py -u twitch.tv/geekandsundry -t AUTH_TOKEN -o outdir
-```
-By default `-u` is set as `twitch.tv/geekandsundry`
-
-`-t` if not set, `--twitch-oauth-token` when calling streamlink will not be set and will use token set in streamlink config
-
-`-o /home/user/Videos/criticalrole` to specify folder (folder must exist)
-
-`-n` start recording right now
-
-`-w` amount of seconds to wait until start recording. Check
-[wheniscriticalrole.com][https://wheniscriticalrole.com]
-
-Omitting `-n` or `-w` option defaults to using Selenium to parse the above
-mentioned website and gets the most accurate time automaticly. You will need
-selenium and a Firefox driver in your Path.  
-
-Paths can be POXIX or Windows format. Thanks to `pathlib`.
 
 ### Docker image (any platform)
 TODO
