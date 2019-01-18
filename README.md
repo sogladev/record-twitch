@@ -49,6 +49,8 @@ scheduled task for this similar to the one below.
 
 
 ## Ubuntu 18.04 or similar
+
+
 Modify `record.sh` and cronjob `cronjob.txt`
 
 Change path to record.sh `/home/user/scheduled_jobs/record.sh`
@@ -76,3 +78,22 @@ Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accor
 ### Modify `record.sh`
 `record.sh` set your AUTH_TOKEN or config in streamlink cfg. Set `OUTDIR` to
 where you want the video saved.
+
+### Record.py (Ubuntu 18.04 and Windows 10)
+Requires python3.6 and streamlink to be installed
+```
+(optional) mkvirtualenv -p /usr/bin/python3.6 <env-name> 
+(required) pip3 install -r requirements.txt
+(example) python3 record.py -u twitch.tv/geekandsundry -t AUTH_TOKEN -o outdir
+```
+By default `-u` is set as `twitch.tv/geekandsundry`
+
+`-t` if not set, `--twitch-oauth-token` when calling streamlink will not be set and will use token set in streamlink config
+
+`-o /home/user/Videos/criticalrole` to specify folder (folder must exist)
+
+Paths can be POXIX or Windows format. Thanks to `pathlib`.
+
+### Docker image (any platform)
+TODO
+
