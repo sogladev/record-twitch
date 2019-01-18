@@ -8,6 +8,37 @@ import time
 import os
 
 
+def seconds_until_criticalrole():
+    # # Values are dynamicly generated. Grabbing HTML and parsing doesn't work!
+    # page = urlopen('http://wheniscriticalrole.com')
+    # soup = BeautifulSoup(page)
+    # #soup.prettify()
+    # tags = soup.find("div", attrs = {"id":"countdown-time"})
+    # print(tags)
+    # days = int(tags.find("div", attrs = {"id":"days"}).string)
+    # print(days)
+    # hours = int(tags.find("div", attrs = {"id":"hours"}).string)
+    # print(hours)
+    # minutes = int(tags.find("div", attrs = {"id":"minutes"}).string)
+    # print(minutes)
+    # seconds = int(tags.find("div", attrs = {"id":"seconds"}).string)
+    # print(seconds)
+    my_url = 'http://wheniscriticalrole.com'
+    from selenium import webdriver
+    from selenium.webdriver.firefox.options import Options
+    options = Options()
+    options.headless = True
+    driver = webdriver.Firefox(options=options)
+    driver.get(my_url)
+    days = int(driver.find_element_by_id(id_='days').text)
+    hours = int(driver.find_element_by_id(id_='hours').text)
+    minutes = int(driver.find_element_by_id(id_='minutes').text)
+    seconds = int(driver.find_element_by_id(id_='seconds').text)
+    print(f'CR Airs in : {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
+    return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
+
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description='Process arguments')
     parser.add_argument(
@@ -20,8 +51,11 @@ def parse_args():
     parser.add_argument(
         '-t', '--token', dest='token', help='twitch authentication token')
     parser.add_argument(
-        '-w', '--wait', dest='time_wait', type=int, default=0,
+        '-w', '--wait', dest='time_wait', type=int,
         help='wait time (seconds) before start recording')
+    parser.add_argument(
+        '-n', '--now', dest='now', action="store_true",
+        help='start recording right now')
     return parser.parse_args()
 
 
@@ -40,7 +74,11 @@ def main(args):
     token_arg = f'--twitch-oauth-token {args.token}' if\
             args.token is not None else ''
     with working_directory(Path(args.out_dir)):
-        time.sleep(args.time_wait)
+        if not args.now:
+            if args.wait is not None:
+                time.sleep(args.time_wait)
+            else:
+                sleep(seconds_until_criticalrole()-10*60)
         while(True):
             time_now = dt.datetime.now()
             cmd = (
@@ -53,5 +91,6 @@ def main(args):
 
 if __name__ == '__main__':
     args = parse_args()
-    main(args)
+    print(seconds_until_criticalrole())
+    #main(args)
     exit(0)

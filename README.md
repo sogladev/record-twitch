@@ -12,11 +12,15 @@ GUI with PyQT5. Fastest and easiest for required functionality. TKTinker too
 much of a hassle for this use case.
 
 Package with PyInstall. Has support for python3+, Windows and Linux, one file
-executable.
+executable. PyInstall method failed due to not having streamlink installed.
+Tried adding dependencies to hidden_imports in .spec file, but to no avail.
 
-- [ ] Rewriting below scripts into python only
+
+- [x] Rewriting below scripts into python only
 - [ ] GUI for easy configuration 
-- [ ] Package with PyInstall
+- [x] ~~Package with PyInstall~~ (failed)
+- [ ] Package with docker
+- [ ] Read time until critical role from website
 
 ## Requirements
 [Twitch oauth token](https://twitchapps.com/tmi/)
@@ -80,7 +84,8 @@ Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accor
 where you want the video saved.
 
 ### Record.py (Ubuntu 18.04 and Windows 10)
-Requires python3.6 and streamlink to be installed
+Requires python3.6 and dependencies listed in `requirements.txt` to be installed
+
 ```
 (optional) mkvirtualenv -p /usr/bin/python3.6 <env-name> 
 (required) pip3 install -r requirements.txt
@@ -91,6 +96,15 @@ By default `-u` is set as `twitch.tv/geekandsundry`
 `-t` if not set, `--twitch-oauth-token` when calling streamlink will not be set and will use token set in streamlink config
 
 `-o /home/user/Videos/criticalrole` to specify folder (folder must exist)
+
+`-n` start recording right now
+
+`-w` amount of seconds to wait until start recording. Check
+[wheniscriticalrole.com][https://wheniscriticalrole.com]
+
+Omitting `-n` or `-w` option defaults to using Selenium to parse the above
+mentioned website and gets the most accurate time automaticly. You will need
+selenium and a Firefox driver in your Path.  
 
 Paths can be POXIX or Windows format. Thanks to `pathlib`.
 
