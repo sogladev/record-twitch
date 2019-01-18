@@ -1,6 +1,6 @@
 #!/bin/sh
 URL=twitch.tv/geekandsundry
-AUTH_TOKEN=YOUR_AUTH_TOKEN or set auth token in streamlink cfg (google this)
+AUTH_TOKEN=token
 OUTDIR=/home/user/Videos/criticalrole/
 cd $OUTDIR
 while true
