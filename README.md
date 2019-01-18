@@ -4,6 +4,20 @@ system.
 
 Your pc must be on while running either method.
 
+## TODO
+
+Rewrite code to be used more easily on multiple platforms.
+
+GUI with PyQT5. Fastest and easiest for required functionality. TKTinker too
+much of a hassle for this use case.
+
+Package with PyInstall. Has support for python3+, Windows and Linux, one file
+executable.
+
+- [ ] Rewriting below scripts into python only
+- [ ] GUI for easy configuration 
+- [ ] Package with PyInstall
+
 ## Requirements
 [Twitch oauth token](https://twitchapps.com/tmi/)
 
