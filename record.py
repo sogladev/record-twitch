@@ -8,6 +8,17 @@ import time
 import os
 
 
+def try_except_default(func):
+    def try_except_function(default_return_value, *args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except:
+            result = default_return_value
+        return result
+    return try_except_function
+
+
+@try_except_default(0)
 def seconds_until_criticalrole():
     from selenium import webdriver
     from selenium.webdriver.firefox.options import Options
@@ -20,7 +31,8 @@ def seconds_until_criticalrole():
     hours = int(driver.find_element_by_id(id_='hours').text)
     minutes = int(driver.find_element_by_id(id_='minutes').text)
     seconds = int(driver.find_element_by_id(id_='seconds').text)
-    print(f'CR Airs in : {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
+    print(
+        f'CR Airs in : {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
     return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
 
 
