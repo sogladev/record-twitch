@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ record cr """
-from pathlib import Path
 from contextlib import contextmanager
+from pathlib import Path
 import datetime as dt
 import argparse
 import time
@@ -31,8 +31,7 @@ def seconds_until_criticalrole():
     hours = int(driver.find_element_by_id(id_='hours').text)
     minutes = int(driver.find_element_by_id(id_='minutes').text)
     seconds = int(driver.find_element_by_id(id_='seconds').text)
-    print(
-        f'CR Airs in : {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
+    print(f'CR Airs in: {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
     return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
 
 
@@ -43,7 +42,7 @@ def parse_args():
         help='url to twitch channel')
     parser.add_argument(
         '-o', '--out', dest='out_dir',
-        default='/home/user/Videos/criticalrole/',
+        default=f'/home/{os.getlogin()}/Videos/criticalrole/',
         help='directory where to save video')
     parser.add_argument(
         '-t', '--token', dest='token', help='twitch authentication token')
@@ -53,6 +52,9 @@ def parse_args():
     parser.add_argument(
         '-n', '--now', dest='now', action="store_true",
         help='start recording right now')
+    parser.add_argument(
+        '-d', '--duration', dest='record_duration',
+        help='duration of recording (in seconds)')
     return parser.parse_args()
 
 
@@ -72,16 +74,22 @@ def main(args):
             args.token is not None else ''
     with working_directory(Path(args.out_dir)):
         if not args.now:
-            if args.wait is not None:
-                time.sleep(args.time_wait)
+            if args.time_wait is not None:
+                sleep_duration = args.time_wait
             else:
-                sleep(seconds_until_criticalrole()-10*60)
+                sleep_duration = seconds_until_criticalrole()-10*60
+                if sleep_duration == 0:
+                    print('WARNING: Failed to load data! Input time manually')
+            print(f'Going to sleep for {sleep_duration} seconds!')
+            time.sleep(sleep_duration)
         while(True):
             time_now = dt.datetime.now()
             cmd = (
-                f'streamlink {token_arg} {args.url} best -o "{time_now:%Y-%m-%d_%H-%M-%S}.flv" --force '
-                '-O --retry-streams 30 --retry-open 9999'
+            f'streamlink {token_arg} {args.url} best -o '
+                f'"{time_now:%Y-%m-%d_%H-%M-%S}.flv" '
+                '--force -O --retry-streams 30 --retry-open 9999'
             )
+            print('Starting recording')
             os.system(cmd)
             time.sleep(30)
 
