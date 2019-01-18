@@ -38,7 +38,6 @@ def seconds_until_criticalrole():
     return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
 
 
-
 def parse_args():
     parser = argparse.ArgumentParser(description='Process arguments')
     parser.add_argument(
@@ -91,6 +90,5 @@ def main(args):
 
 if __name__ == '__main__':
     args = parse_args()
-    print(seconds_until_criticalrole())
-    #main(args)
+    main(args)
     exit(0)
