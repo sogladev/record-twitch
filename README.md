@@ -36,7 +36,7 @@ Read the docs:
 
 * For Ubuntu 18.04 (or similar) run `sudo pip install streamlink`
 
-### Method1: Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10)
+### Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10)
 
 Required:
 ```
@@ -70,64 +70,3 @@ Selenium and a Firefox driver available in your Path. (google how to setup or
 make sure to use either of these 2 arguments)
 
 `-d` amount of seconds to record. Infinite by default.
-
-
-### Setup cronjob for Ubuntu18.04
-`cronjob.txt` contains settings to configure cronjob. It can run `record.py` in a
-virtualenvironment and output video to a specified folder.
-
-Modify `cronjob.txt` settings and paste to `cronjob -e`
-
-
-`SHELL=/bin/bash` needed to run source cmd
-
-`50 3 * * 5` see [Crontab guru](https://crontab.guru/#50_3_*_*_5). `At 03:50 on Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accordingly to your timezone.
-
-`source /home/user/.virtualenvs/<virtual-env>/bin/activate` activate virtual environment
-
-`timeout 8h /home/user/.virtualenvs/<virtual-env>/bin/python3.6 /home/user/scheduled_jobs/record-critrole/record.py -n` Stops recording after 8hrs and starts recording immediatly when called.
-
-`>> /home/user/scheduled_jobs/record.log 2>&1` (optional) writes the stdout to log. This line can be omitted.
-
-
-## Method2: Windows (deprecated)
-required:
-```
-streamlink
-```
-
-Edit `record.bat` and change the following settings inside the script
-
-1. Use `cd` to navigate to output folder where streamlink will be called
-2. `WAIT` this is the amount of seconds until critical role airs
-I use [wheniscriticalrole](http://www.wheniscriticalrole.com/) and convert to seconds and subtract
-about 600 (10mins) to start recording slightly earlier.
-3. `EPISODE` to name file correctly
-4. `DURATION` (optional) give e.g. 5 hours in seconds to record for 5 hours and
-   then shutdown pc if shutdown command is added
-
-Run the script AND turn it off manually or it will keep recording the
-channel after the episode is finished. You can run a `shutdown -s -f -t
-WAIT+5*3600` to shutdown your pc after 5 hours of recording.   
-
-You must change the `WAIT` everytime and run manually. You can setup a
-scheduled task for this similar to the one below.
-
-
-## Method3: Ubuntu 18.04 (deprecated)
-```
-streamlink
-```
-
-Modify `record.sh` and cronjob `cronjob.txt`
-
-Change path to record.sh `/home/user/scheduled_jobs/record.sh`
-
-Change output dir of video `/home/user/Videos/criticalrole/`
-
-### Modify `record.sh`
-`record.sh` set your AUTH_TOKEN or config in streamlink cfg. Set `OUTDIR` to
-where you want the video saved.
-
-## ~~~Docker image (any platform)~~
-
