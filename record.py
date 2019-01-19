@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from contextlib import contextmanager
-from threading import Thread
 from pathlib import Path
 import datetime as dt
 import argparse
@@ -54,9 +53,6 @@ def parse_args():
     parser.add_argument(
         '-n', '--now', dest='now', action="store_true",
         help='start recording right now')
-    parser.add_argument(
-        '-d', '--duration', dest='record_duration', type=int,
-        help='duration of recording (in seconds)')
     return parser.parse_args()
 
 
@@ -95,14 +91,8 @@ def main(args):
         print(f'Sleep for {sleep_duration} seconds!')
         time.sleep(sleep_duration)
     with working_directory(Path(args.out_dir)):
-        t = Thread(target=record_worker, args=(token, args.url))
         print('Start recording')
-        t.setDaemon(True)
-        t.start()
-        if args.record_duration is None:
-            t.join()
-        else:
-            t.join(args.record_duration)
+        record_worker(token, args.url)
 
 
 if __name__ == '__main__':

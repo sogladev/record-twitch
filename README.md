@@ -68,5 +68,3 @@ Omitting `-n` or `-w` option defaults to using Selenium to parse the above
 mentioned website and gets the most accurate time automaticly. You will need
 Selenium and a Firefox driver available in your Path. (google how to setup or
 make sure to use either of these 2 arguments)
-
-`-d` amount of seconds to record. Infinite by default.
