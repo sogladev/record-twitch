@@ -2,7 +2,7 @@
 Info to record Twitch.tv shows on Windows or on a Ubuntu 18.04 (or similar)
 system.
 
-In essence, this is a wrapper to call `streamlink`. It offers more reliable
+In essence, this is a CLI wrapper to call `streamlink`. It offers more reliable
 recording and allows you to set a duration (optional) and a time until
 recording (optional).
 
@@ -18,14 +18,15 @@ Package with PyInstall. Has support for python3+, Windows and Linux, one file
 executable. PyInstall method failed due to not having streamlink installed.
 Tried adding dependencies to hidden_imports in .spec file, but to no avail.
 
+Docker seems overkill. Mostly due to size of >100MB. Run from a virtual environment instead. 
+
 - [x] Rewriting below scripts into python only
 - [x] Read time until critical role from website
+- [x] Update cronjob to launch python script in virtualenv
 - [x] ~~Package with PyInstall~~ (failed)
-- [ ] GUI for easy configuration 
-- [ ] Package with docker to avoid hassle with Streamlink/Selenium install
-- [ ] Update cronjob to launch python script
+- [ ] ~~GUI for easy configuration - [ ] Package with docker to avoid hassle with Streamlink/Selenium install~~ (canceled)
 
-## Requirements
+## Essential Requirements
 [Twitch oauth token](https://twitchapps.com/tmi/)
 
 [Streamlink](https://github.com/streamlink/streamlink)
@@ -35,7 +36,9 @@ Read the docs:
 
 * For Ubuntu 18.04 (or similar) run `sudo pip install streamlink`
 
-### Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10) Required:
+### Method1: Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10)
+
+Required:
 ```
 streamlink
 python3.6 
@@ -63,10 +66,31 @@ By default `-u` is set as `twitch.tv/geekandsundry`
 
 Omitting `-n` or `-w` option defaults to using Selenium to parse the above
 mentioned website and gets the most accurate time automaticly. You will need
-Selenium and a Firefox driver available in your Path.  
+Selenium and a Firefox driver available in your Path. (google how to setup or
+make sure to use either of these 2 arguments)
+
+`-d` amount of seconds to record. Infinite by default.
 
 
-## Windows
+### Setup cronjob for Ubuntu18.04
+`cronjob.txt` contains settings to configure cronjob. It can run `record.py` in a
+virtualenvironment and output video to a specified folder.
+
+Modify `cronjob.txt` settings and paste to `cronjob -e`
+
+
+`SHELL=/bin/bash` needed to run source cmd
+
+`50 3 * * 5` see [Crontab guru](https://crontab.guru/#50_3_*_*_5). `At 03:50 on Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accordingly to your timezone.
+
+`source /home/user/.virtualenvs/<virtual-env>/bin/activate` activate virtual environment
+
+`timeout 8h /home/user/.virtualenvs/<virtual-env>/bin/python3.6 /home/user/scheduled_jobs/record-critrole/record.py -n` Stops recording after 8hrs and starts recording immediatly when called.
+
+`>> /home/user/scheduled_jobs/record.log 2>&1` (optional) writes the stdout to log. This line can be omitted.
+
+
+## Method2: Windows (deprecated)
 required:
 ```
 streamlink
@@ -90,7 +114,7 @@ You must change the `WAIT` everytime and run manually. You can setup a
 scheduled task for this similar to the one below.
 
 
-## Ubuntu 18.04 or similar
+## Method3: Ubuntu 18.04 (deprecated)
 ```
 streamlink
 ```
@@ -101,28 +125,9 @@ Change path to record.sh `/home/user/scheduled_jobs/record.sh`
 
 Change output dir of video `/home/user/Videos/criticalrole/`
 
-### Setup cronjob
-`cronjob.txt` contains settings needed to run `record.sh` and output video to
-the folder. 
-
-`PATH` is your $PATH variable (`echo $PATH`). This is necessary to run the
-`streamlink` application.
-
-Modify `cronjob.txt` settings and paste to `cronjob -e`
-
-`50 3 * * 5 timeout 6h sh /home/user/scheduled_jobs/record.sh >> /home/user/scheduled_jobs/record.log 2>&1`
-
-`50 3 * * 5` see [Crontab guru](https://crontab.guru/#50_3_*_*_5). `At 03:50 on
-Friday` Critical Role airs at 4:00AM local time on Friday. Change the time accordingly to your timezone. I'm aware timezones can be set `America/Los_Angeles`. Sadly, this doesn't seem to work on my pc.
-
-`timeout 6h` stops recording after 6 hours
-
-`>> /home/user/scheduled_jobs/record.log 2>&1` (optional) writes the stdout to log. This line can be omitted.
-
 ### Modify `record.sh`
 `record.sh` set your AUTH_TOKEN or config in streamlink cfg. Set `OUTDIR` to
 where you want the video saved.
 
-### Docker image (any platform)
-TODO
+## ~~~Docker image (any platform)~~
 
