@@ -2,5 +2,6 @@
 # and paste into editor when running following cmd
 # crontab -e 
 MAILTO=""
-PATH=/home/user/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-50 3 * * 5 timeout 6h sh /home/user/scheduled_jobs/record.sh >> /home/user/scheduled_jobs/record.log 2>&1
+SHELL=/bin/bash
+50 2 * * 5 source /home/user/.virtualenvs/_record-cr-cronjob/bin/activate && timeout 8h /home/user/.virtualenvs/_record-cr-cronjob/bin/python3.6 /home/user/scheduled_jobs/record-critrole/record.py -n > /home/user/scheduled_jobs/cron.log 2>&1 ; deactivate
+

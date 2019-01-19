@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-""" record cr """
 from contextlib import contextmanager
+from threading import Thread
 from pathlib import Path
 import datetime as dt
 import argparse
 import time
 import os
+import sys
 
 
 def try_except_default(func):
@@ -31,7 +32,8 @@ def seconds_until_criticalrole():
     hours = int(driver.find_element_by_id(id_='hours').text)
     minutes = int(driver.find_element_by_id(id_='minutes').text)
     seconds = int(driver.find_element_by_id(id_='seconds').text)
-    print(f'CR Airs in: {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
+    print(
+        f'CR Airs in: {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
     return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
 
 
@@ -53,14 +55,13 @@ def parse_args():
         '-n', '--now', dest='now', action="store_true",
         help='start recording right now')
     parser.add_argument(
-        '-d', '--duration', dest='record_duration',
+        '-d', '--duration', dest='record_duration', type=int,
         help='duration of recording (in seconds)')
     return parser.parse_args()
 
 
 @contextmanager
 def working_directory(path):
-    """Changes working directory and returns to previous on exit."""
     prev_cwd = Path.cwd()
     os.chdir(path)
     try:
@@ -69,32 +70,41 @@ def working_directory(path):
         os.chdir(prev_cwd)
 
 
+def record_worker(token, url):
+    while(True):
+        time_now = dt.datetime.now()
+        cmd = (
+            f'streamlink {token} {url} best -o '
+            f'"{time_now:%Y-%m-%d_%H-%M-%S}.flv" '
+            '--force -O --retry-streams 30 --retry-open 9999'
+        )
+        os.system(cmd)
+        time.sleep(30)
+
+
 def main(args):
-    token_arg = f'--twitch-oauth-token {args.token}' if\
+    token = f'--twitch-oauth-token {args.token}' if\
             args.token is not None else ''
+    if not args.now:
+        if args.time_wait is not None:
+            sleep_duration = args.time_wait
+        else:
+            sleep_duration = seconds_until_criticalrole()-10*60
+            if sleep_duration == 0:
+                print('WARNING: Failed to parse website! Input time with -w')
+        print(f'Sleep for {sleep_duration} seconds!')
+        time.sleep(sleep_duration)
     with working_directory(Path(args.out_dir)):
-        if not args.now:
-            if args.time_wait is not None:
-                sleep_duration = args.time_wait
-            else:
-                sleep_duration = seconds_until_criticalrole()-10*60
-                if sleep_duration == 0:
-                    print('WARNING: Failed to load data! Input time manually')
-            print(f'Going to sleep for {sleep_duration} seconds!')
-            time.sleep(sleep_duration)
-        while(True):
-            time_now = dt.datetime.now()
-            cmd = (
-            f'streamlink {token_arg} {args.url} best -o '
-                f'"{time_now:%Y-%m-%d_%H-%M-%S}.flv" '
-                '--force -O --retry-streams 30 --retry-open 9999'
-            )
-            print('Starting recording')
-            os.system(cmd)
-            time.sleep(30)
+        t = Thread(target=record_worker, args=(token, args.url))
+        print('Start recording')
+        t.setDaemon(True)
+        t.start()
+        if args.record_duration is None:
+            t.join()
+        else:
+            t.join(args.record_duration)
 
 
 if __name__ == '__main__':
     args = parse_args()
     main(args)
-    exit(0)
