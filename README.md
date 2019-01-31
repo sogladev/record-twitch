@@ -1,3 +1,4 @@
+record.py [![Build Status](https://travis-ci.com/MoskiMBA/record-critrole.svg?branch=master)](https://travis-ci.com/MoskiMBA/record-critrole)
 # record-critrole
 Info to record Twitch.tv shows on Windows or on a Ubuntu 18.04 (or similar)
 system.
