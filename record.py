@@ -1,18 +1,19 @@
-#!/usr/bin/env python3
+""" Record stream """
+# !/usr/bin/env python3
+import argparse
+import datetime as dt
+import os
+import time
 from contextlib import contextmanager
 from pathlib import Path
-import datetime as dt
-import argparse
-import time
-import os
-import sys
 
 
 def try_except_default(func):
+    """ Ignore exceptions """
     def try_except_function(default_return_value, *args, **kwargs):
         try:
             result = func(*args, **kwargs)
-        except:
+        except Exception:  # pylint: disable=W0703
             result = default_return_value
         return result
     return try_except_function
@@ -20,6 +21,8 @@ def try_except_default(func):
 
 @try_except_default(0)
 def seconds_until_criticalrole():
+    """ Calculate seconds until critical role
+    if anything goes wrong, default to 0 seconds """
     from selenium import webdriver
     from selenium.webdriver.firefox.options import Options
     my_url = 'http://wheniscriticalrole.com'
@@ -32,11 +35,13 @@ def seconds_until_criticalrole():
     minutes = int(driver.find_element_by_id(id_='minutes').text)
     seconds = int(driver.find_element_by_id(id_='seconds').text)
     print(
-        f'CR Airs in: {days} days, {hours} hours, {minutes} minutes, {seconds} seconds')
+        f'CR Airs in: {days} days, {hours} hours,'
+        '{minutes} minutes, {seconds} seconds')
     return days * 24 * 3600 + hours * 3600 + minutes * 60 + seconds
 
 
 def parse_args():
+    """ Parse args """
     parser = argparse.ArgumentParser(description='Process arguments')
     parser.add_argument(
         '-u', '--url', dest='url', default='twitch.tv/geekandsundry',
@@ -58,6 +63,7 @@ def parse_args():
 
 @contextmanager
 def working_directory(path):
+    """ Use path as working directory then switch back to prev dir after """
     prev_cwd = Path.cwd()
     os.chdir(path)
     try:
@@ -67,7 +73,8 @@ def working_directory(path):
 
 
 def record_worker(token, url):
-    while(True):
+    """ Call streamlink to record """
+    while True:
         time_now = dt.datetime.now()
         cmd = (
             f'streamlink {token} {url} best -o '
@@ -79,6 +86,7 @@ def record_worker(token, url):
 
 
 def main(args):
+    """ Set up worker to record CR """
     token = f'--twitch-oauth-token {args.token}' if\
             args.token is not None else ''
     if not args.now:
@@ -96,5 +104,5 @@ def main(args):
 
 
 if __name__ == '__main__':
-    args = parse_args()
-    main(args)
+    ARGS = parse_args()
+    main(ARGS)
