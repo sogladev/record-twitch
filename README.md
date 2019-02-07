@@ -64,7 +64,7 @@ By default `-u` is set as `twitch.tv/geekandsundry`
 `-n` start recording right now (overrides `- w` option)
 
 `-w` amount of seconds to wait until start recording. Check
-[wheniscriticalrole.com][https://wheniscriticalrole.com]
+[wheniscriticalrole.com](https://wheniscriticalrole.com)
 
 Omitting `-n` or `-w` option defaults to using Selenium to parse the above
 mentioned website and gets the most accurate time automaticly. You will need
