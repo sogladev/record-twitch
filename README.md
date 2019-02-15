@@ -24,7 +24,7 @@ Docker seems overkill. Mostly due to size of >100MB. Run from a virtual environm
 - [x] Rewriting below scripts into python only
 - [x] Read time until critical role from website
 - [x] Update cronjob to launch python script in virtualenv
-- [ ] ~~Create executable~with PyInstall~ (canceled)
+- [ ] ~~Create executable with PyInstall (canceled)~~
 - [ ] ~~GUI for easy configuration~~ (canceled)
 - [ ] ~~Package with docker to avoid hassle with Streamlink/Selenium install~~ (canceled)
 
