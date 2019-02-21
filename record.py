@@ -44,7 +44,7 @@ def parse_args():
     """ Parse args """
     parser = argparse.ArgumentParser(description='Process arguments')
     parser.add_argument(
-        '-u', '--url', dest='url', default='twitch.tv/geekandsundry',
+        '-u', '--url', dest='url', default='twitch.tv/criticalrole',
         help='url to twitch channel')
     parser.add_argument(
         '-o', '--out', dest='out_dir',
