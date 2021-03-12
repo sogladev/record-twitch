@@ -3,5 +3,5 @@
 # crontab -e 
 MAILTO=""
 SHELL=/bin/bash
-50 2 * * 5 source /home/user/.virtualenvs/_record-cr-cronjob/bin/activate && timeout 8h /home/user/.virtualenvs/_record-cr-cronjob/bin/python3.6 /home/user/scheduled_jobs/record-critrole/record.py -n > /home/user/scheduled_jobs/cron.log 2>&1 ; deactivate
+50 2 * * 5 source /home/user/.virtualenvs/_record-cr-cronjob/bin/activate && timeout 8h /home/user/.virtualenvs/_record-cr-cronjob/bin/python3.9 /home/user/scheduled_jobs/record-critrole/record.py -n > /home/user/scheduled_jobs/cron.log 2>&1 ; deactivate
 

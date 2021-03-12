@@ -51,8 +51,6 @@ def parse_args():
         default=f'/home/{os.getlogin()}/Videos/criticalrole/',
         help='directory where to save video')
     parser.add_argument(
-        '-t', '--token', dest='token', help='twitch authentication token')
-    parser.add_argument(
         '-w', '--wait', dest='time_wait', type=int,
         help='wait time (seconds) before start recording')
     parser.add_argument(
@@ -72,12 +70,12 @@ def working_directory(path):
         os.chdir(prev_cwd)
 
 
-def record_worker(token, url):
+def record_worker(url):
     """ Call streamlink to record """
     while True:
         time_now = dt.datetime.now()
         cmd = (
-            f'streamlink {token} {url} best -o '
+            f'streamlink {url} best -o '
             f'"{time_now:%Y-%m-%d_%H-%M-%S}.flv" '
             '--force -O --retry-streams 30 --retry-open 9999'
         )
@@ -87,8 +85,6 @@ def record_worker(token, url):
 
 def main(args):
     """ Set up worker to record CR """
-    token = f'--twitch-oauth-token {args.token}' if\
-            args.token is not None else ''
     if not args.now:
         if args.time_wait is not None:
             sleep_duration = args.time_wait
@@ -100,7 +96,7 @@ def main(args):
         time.sleep(sleep_duration)
     with working_directory(Path(args.out_dir)):
         print('Start recording')
-        record_worker(token, args.url)
+        record_worker(args.url)
 
 
 if __name__ == '__main__':
