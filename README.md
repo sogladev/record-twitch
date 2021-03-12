@@ -1,4 +1,5 @@
-record.py [![Build Status](https://travis-ci.com/jJelle-M/record-twitch.svg?branch=master)](https://travis-ci.com/Jelle-M/record-twitch)
+record.py [![Build Status](https://travis-ci.com/Jelle-M/record-twitch.svg?branch=master)](https://travis-ci.com/Jelle-M/record-twitch)
+
 # record-critrole
 Info to record Twitch.tv shows on Windows or on a Ubuntu 18.04 (or similar)
 system.
