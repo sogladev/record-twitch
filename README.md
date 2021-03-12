@@ -1,17 +1,17 @@
-record.py [![Build Status](https://travis-ci.com/MoskiMBA/record-critrole.svg?branch=master)](https://travis-ci.com/MoskiMBA/record-critrole)
+record.py [![Build Status](https://travis-ci.com/jelle-m/record-critrole.svg?branch=master)](https://travis-ci.com/jelle-m/record-critrole)
 # record-critrole
 Info to record Twitch.tv shows on Windows or on a Ubuntu 18.04 (or similar)
 system.
 
-In essence, this is a CLI wrapper to call `streamlink`. It offers more reliable
+In essence, this is a CLI wrapper to call `streamlink v2.0.0`. It offers more reliable
 recording and allows you to set a duration (optional) and a time until
 recording (optional).
 
+There are files with .py for both windows/linux, a linux shell .sh script + cronjob and a  windows batch .bat + scheduled task. 
+
 Initially created to record [Critical Role](https://critrole.com). One feature is to parse the website http://wheniscriticalrole.com to see when the show airs.
 
-
 ## TODO
-
 GUI with PyQT5. Fastest and easiest for required functionality. TKTinker feels
 like too much work to learn.
 
@@ -24,10 +24,6 @@ Docker seems overkill. Mostly due to size of >100MB. Run from a virtual environm
 - [x] Rewriting below scripts into python only
 - [x] Read time until critical role from website
 - [x] Update cronjob to launch python script in virtualenv
-- [ ] ~~Create executable with PyInstall (canceled)~~
-- [ ] ~~GUI for easy configuration~~ (canceled)
-- [ ] ~~Package with docker to avoid hassle with Streamlink/Selenium install~~ (canceled)
-
 ## Essential Requirements
 [Twitch oauth token](https://twitchapps.com/tmi/)
 
@@ -38,8 +34,10 @@ Read the docs:
 
 * For Ubuntu 18.04 (or similar) run `sudo pip install streamlink`
 
-### Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10)
+### Windows task scheduler
+Set a weekly trigger 5mins before shows goes live with the action to start `recordT_manager.bat` with optional arg (default=2000 or 5.5hrs) duration of recording. 
 
+### Python3.6 (**RECOMMENDED**) (Ubuntu 18.04 and Windows 10)
 Required:
 ```
 streamlink
@@ -52,7 +50,7 @@ Setup environment
 ```
 (optional) mkvirtualenv -p /usr/bin/python3.6 <env-name> 
 (required) pip3 install -r requirements.txt
-(example) python3 record.py -u twitch.tv/geekandsundry -t AUTH_TOKEN -o outdir
+(example) python3 record.py -u twitch.tv/geekandsundry -o outdir
 -w 3600
 ```
 By default `-u` is set as `twitch.tv/geekandsundry`
