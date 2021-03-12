@@ -1,5 +1,5 @@
 mccabe==0.6.1
 pyasn1==0.1.9
 pycodestyle==2.4.0
-pylint==2.2.2
+pylint==2.7.2
 pytest==4.1.1
