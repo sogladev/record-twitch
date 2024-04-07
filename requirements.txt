@@ -1,2 +1,2 @@
-streamlink==0.14.2
-selenium==3.141.0
+selenium==4.17.2
+streamlink==6.7.2
